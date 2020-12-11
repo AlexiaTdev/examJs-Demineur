@@ -1,28 +1,36 @@
 var grille;
 var caseJeu = 5;
 var nbrCase = 9;
+//var imgFont= document.createElement('img', {src : "images/normal.png"});
 
-function createcase() {
-    grille = new Array(9);
-    for (var i = 0; i < 9; i++)
+    //imgFont.setAttributeNS("img", "src", "images/normal.png");
+    //imgFont.;
+    //imgFont = 
+    
+
+function createcase(nbrCase) {
+    grille = new Array(nbrCase);
+    for (var i = 0; i < nbrCase; i++)
         {
-        	grille[i]= new Array(9);
-        	for (var x = 0; x < 9; x++) {
-            	grille[i][x]= caseJeu;
+        	grille[i]= new Array(nbrCase);
+        	for (var x = 0; x < nbrCase; x++) {
+                var imgFont= document.createElement('img');
+                imgFont.src = "images/normal.png";
+            	grille[i][x]= imgFont;
         	}
         }
-    //$('div#grille').text(grille);
     afficherGrille(grille, nbrCase);
 }
 
 function afficherGrille(grille, nbrCase){
-    //$('div#grille').text(grille);
     for (var i = 0; i < nbrCase; i++){
-        $('div#grille').append(grille[i] + '</br>');
+            for (var x = 0; x < nbrCase; x++){
+                $('div#grille').append(grille[i][x]);
+            }
+            $('div#grille').append("</br>"); 
     }
 }
 
 $(document).ready(function() {
-    console.log('ok');
-    createcase();
+    createcase(nbrCase);
 })
