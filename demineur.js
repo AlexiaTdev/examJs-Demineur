@@ -1,6 +1,8 @@
 
 var grille;
 var caseJeu = 5;
+//var imgFont = document.createElement("img");
+var imgFont = "Image/empty.png";
 
 function createcase() {
     grille = new Array(9);
@@ -8,10 +10,10 @@ function createcase() {
         {
         	grille[i]= new Array(9);
         	for (var x = 0; x < 9; x++) {
-            	grille[i][x]= caseJeu;
+            	grille[i][x]= imgFont;
         	}
     	}
-    $('div#grille').text(grille);
+    $('div#grille').text (grille);
 }
 
 
