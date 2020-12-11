@@ -16,6 +16,8 @@ function createcase(nbrCase) {
         	for (var x = 0; x < nbrCase; x++) {
                 var imgFont= document.createElement('img');
                 imgFont.src = "images/normal.png";
+                //var idimg = document.createAttribute('essai');
+                imgFont.id = "("+i+", "+x+")";
             	grille[i][x]= imgFont;
         	}
         }
@@ -31,6 +33,12 @@ function afficherGrille(grille, nbrCase){
     }
 }
 
+function getcase(){
+    console.log("je suis touchee");
+
+}
+
 $(document).ready(function() {
     createcase(nbrCase);
+    $('img').on('click', getcase);
 })
