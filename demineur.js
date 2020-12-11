@@ -2,13 +2,13 @@ var grille;
 
 var nbCasex = 9;
 var nbCasey = 9;
-//var nbrCase = 9;
+
 
 var nbrBomb = 10;
 
 var nbBombeAlentour = 0;
 
-var bombe = "b";
+
 var listEtat = ["images/empty.png", "images/1.png", "images/2.png", "images/3.png", "images/4.png", "images/5.png", "images/6.png", "images/7.png", "images/8.png", "images/normal.png", "images/bomb.png", "images/flag.png" ]
 
 var pathArray = "file://" + window.location.pathname.slice(0, -10);
@@ -39,7 +39,6 @@ function afficherGrille(){
 }
 
 function playcase(coordX, coordY){
-    //console.log( coordX +" : "+ coordY+ " touchee 2");
     afficherGrille();
 }
 
@@ -53,7 +52,6 @@ function ajoutBombe() {
         var x = getRandomInt(nbCasex);
         var y = getRandomInt(nbCasey);
         grille[y][x].src = listEtat[10];
-        //console.log(y+ "bombe "+ x + "donc "+ grille[y][x].src);
     }
 }
 function renseigneLeNbrBombe(){
@@ -63,7 +61,6 @@ function renseigneLeNbrBombe(){
             if (grille[i][a].src != pathArray+listEtat[10]){
                 quelestlenombredebombeAutourCase(a,i);
                 grille[i][a].src = listEtat[nbBombeAlentour];
-                //console.log(nbBombeAlentour+"  numero complementaire  " + grille[i][a].src);
             }
         }
     }
@@ -73,7 +70,6 @@ function quelestlenombredebombeAutourCase(x,y){
     bombeExist = 0;
     nbBombeAlentour = 0;
     if (x != 0 && y != 0){
-        console.log(grille[y][x].src + "--------------------------------" + pathArray+listEtat[10]);
         if (grille[y-1][x-1].src == pathArray+listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
@@ -121,7 +117,6 @@ function quelestlenombredebombeAutourCase(x,y){
             bombeExist = 1;
         }
     }
-    //console.log("il y a "+ nbBombeAlentour+ "dans la case x"+x+"y"+y);
 }
 
 
@@ -132,7 +127,6 @@ function newStart(){
     renseigneLeNbrBombe();
     afficherGrille();
     $('img').on('click', function() {playcase(this.dataset.x, this.dataset.y);});
-
 }
 
 $(document).ready(function() {
