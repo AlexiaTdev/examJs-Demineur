@@ -35,10 +35,14 @@ function afficherGrille(grille, nbrCase){
 
 function getcase(){
     console.log("je suis touchee");
+}
 
+function newStart(){
+    $('div#grille').text("");
+    createcase(nbrCase);
+    $('img').on('click', getcase);
 }
 
 $(document).ready(function() {
-    createcase(nbrCase);
-    $('img').on('click', getcase);
+    $('#debutpartie').on('click', newStart);
 })
