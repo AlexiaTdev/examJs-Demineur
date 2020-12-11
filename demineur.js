@@ -1,48 +1,141 @@
 var grille;
-var caseJeu = 5;
-var nbrCase = 9;
-//var imgFont= document.createElement('img', {src : "images/normal.png"});
 
-    //imgFont.setAttributeNS("img", "src", "images/normal.png");
-    //imgFont.;
-    //imgFont = 
-    
+var nbCasex = 9;
+var nbCasey = 9;
+//var nbrCase = 9;
 
-function createcase(nbrCase) {
-    grille = new Array(nbrCase);
-    for (var i = 0; i < nbrCase; i++)
+var nbrBomb = 10;
+
+var nbBombeAlentour = 0;
+
+var bombe = "b";
+var listEtat = ["images/empty.png", "images/1.png", "images/2.png", "images/3.png", "images/4.png", "images/5.png", "images/6.png", "images/7.png", "images/8.png", "images/normal.png", "images/bomb.png", "images/flag.png" ]
+
+var pathArray = "file://" + window.location.pathname.slice(0, -10);
+
+function createcase(nbCasex, nbCasey) {
+    grille = [];
+    for (var i = 0; i < nbCasey; i++)
         {
-        	grille[i]= new Array(nbrCase);
-        	for (var x = 0; x < nbrCase; x++) {
+        	grille[i]=[];
+        	for (var x = 0; x < nbCasex; x++) {
                 var imgFont= document.createElement('img');
-                imgFont.src = "images/normal.png";
-                //var idimg = document.createAttribute('essai');
-                imgFont.id = "("+i+", "+x+")";
-            	grille[i][x]= imgFont;
+                imgFont.dataset.src = listEtat[9];
+                imgFont.dataset.x = x;
+                imgFont.dataset.y = i;
+                grille[i][x]= imgFont;
         	}
         }
-    afficherGrille(grille, nbrCase);
 }
 
-function afficherGrille(grille, nbrCase){
-    for (var i = 0; i < nbrCase; i++){
-            for (var x = 0; x < nbrCase; x++){
+function afficherGrille(){
+    $('div#grille').text("");
+    for (var i = 0; i < nbCasey; i++){
+            for (var x = 0; x < nbCasex; x++){
                 $('div#grille').append(grille[i][x]);
             }
             $('div#grille').append("</br>"); 
     }
 }
 
-function getcase(){
-    console.log("je suis touchee");
+function playcase(coordX, coordY){
+    //console.log( coordX +" : "+ coordY+ " touchee 2");
+    afficherGrille();
 }
+
+
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+}
+function ajoutBombe() {
+    for (var i = 0; i < nbrBomb; i++)
+    {
+        var x = getRandomInt(nbCasex);
+        var y = getRandomInt(nbCasey);
+        grille[y][x].src = listEtat[10];
+        //console.log(y+ "bombe "+ x + "donc "+ grille[y][x].src);
+    }
+}
+function renseigneLeNbrBombe(){
+    for (var i = 0; i < nbCasex; i++){
+        for (var a = 0; a < nbCasey; a++) {
+
+            if (grille[i][a].src != pathArray+listEtat[10]){
+                quelestlenombredebombeAutourCase(a,i);
+                grille[i][a].src = listEtat[nbBombeAlentour];
+                //console.log(nbBombeAlentour+"  numero complementaire  " + grille[i][a].src);
+            }
+        }
+    }
+}
+
+function quelestlenombredebombeAutourCase(x,y){
+    bombeExist = 0;
+    nbBombeAlentour = 0;
+    if (x != 0 && y != 0){
+        console.log(grille[y][x].src + "--------------------------------" + pathArray+listEtat[10]);
+        if (grille[y-1][x-1].src == pathArray+listEtat[10]){
+            nbBombeAlentour = nbBombeAlentour + 1;
+            bombeExist = 1;
+        }
+    }
+    if (x != 0){
+        if (grille[y][x-1].src == pathArray+listEtat[10]){
+            nbBombeAlentour = nbBombeAlentour + 1;
+            bombeExist = 1;
+        }
+    }
+    if (y != nbCasey - 1 && x != 0){
+        if (grille[y+1][x-1].src == pathArray+listEtat[10]){
+            nbBombeAlentour = nbBombeAlentour + 1;
+            bombeExist = 1;
+        }
+    }
+    if (y != nbCasey - 1){
+        if (grille[y+1][x].src == pathArray+listEtat[10]){
+            nbBombeAlentour = nbBombeAlentour + 1;
+            bombeExist = 1;
+        }
+    }
+    if (x != nbCasex - 1 && y != nbCasey - 1){
+        if (grille[y+1][x+1].src == pathArray+listEtat[10]){
+            nbBombeAlentour = nbBombeAlentour + 1;
+            bombeExist = 1;
+        }
+    }
+    if (x != nbCasex - 1){
+        if (grille[y][x+1].src == pathArray+listEtat[10]){
+            nbBombeAlentour = nbBombeAlentour + 1;
+            bombeExist = 1;
+        }
+    }
+    if (y != 0 && x != nbCasex - 1){
+        if (grille[y-1][x+1].src == pathArray+listEtat[10]){
+            nbBombeAlentour = nbBombeAlentour + 1;
+            bombeExist = 1;
+        }
+    }
+    if (y != 0){
+        if (grille[y-1][x].src == pathArray+listEtat[10]){
+            nbBombeAlentour = nbBombeAlentour + 1;
+            bombeExist = 1;
+        }
+    }
+    //console.log("il y a "+ nbBombeAlentour+ "dans la case x"+x+"y"+y);
+}
+
 
 function newStart(){
     $('div#grille').text("");
-    createcase(nbrCase);
-    $('img').on('click', getcase);
+    createcase( nbCasex, nbCasey);
+    ajoutBombe();
+    renseigneLeNbrBombe();
+    afficherGrille();
+    $('img').on('click', function() {playcase(this.dataset.x, this.dataset.y);});
+
 }
 
 $(document).ready(function() {
     $('#debutpartie').on('click', newStart);
 })
+
