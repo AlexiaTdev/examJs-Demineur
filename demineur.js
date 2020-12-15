@@ -1,4 +1,6 @@
 var grille;
+var grilleRevellee;
+var caseVerifieeRecursivite;
 
 var nbCasex = 9;
 var nbCasey = 9;
@@ -13,35 +15,37 @@ var listEtat = ["images/empty.png", "images/1.png", "images/2.png", "images/3.pn
 
 var pathArray = "file://" + window.location.pathname.slice(0, -10);
 
+var listeNumeros = [pathArray+listEtat[1], pathArray+listEtat[2], pathArray+listEtat[3], pathArray+listEtat[4], pathArray+listEtat[5], pathArray+listEtat[6], pathArray+listEtat[7], pathArray+listEtat[8]];
+
+
+
 function createcase(nbCasex, nbCasey) {
+    grilleRevellee =[];
     grille = [];
-    for (var i = 0; i < nbCasey; i++)
-        {
-        	grille[i]=[];
-        	for (var x = 0; x < nbCasex; x++) {
-                var imgFont= document.createElement('img');
-                imgFont.dataset.src = listEtat[9];
-                imgFont.dataset.x = x;
-                imgFont.dataset.y = i;
-                grille[i][x]= imgFont;
-        	}
+    for (var i = 0; i < nbCasey; i++) {
+        grille[i]=[];
+        for (var x = 0; x < nbCasex; x++) {
+            var imgFont= document.createElement('img');
+            imgFont.dataset.src = listEtat[9];
+            imgFont.dataset.x = x;
+            imgFont.dataset.y = i;
+            grille[i][x]= imgFont;
         }
-}
-
-function afficherGrille(){
-    $('div#grille').text("");
-    for (var i = 0; i < nbCasey; i++){
-            for (var x = 0; x < nbCasex; x++){
-                $('div#grille').append(grille[i][x]);
-            }
-            $('div#grille').append("</br>"); 
     }
-}
+    for (var i = 0; i < nbCasey; i++) {
+        grilleRevellee[i]=[];
+        for (var x = 0; x < nbCasex; x++) {
+            var imgFont2= document.createElement('img');
+            imgFont2.dataset.src = listEtat[9];
+            imgFont2.dataset.xr = x;
+            imgFont2.dataset.yr = i;
+            grilleRevellee[i][x]= imgFont2;
+        }
+    }
+    //grilleRevellee = grille;
 
-function playcase(coordX, coordY){
-    afficherGrille();
-}
 
+}
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -64,6 +68,8 @@ function renseigneLeNbrBombe(){
             }
         }
     }
+    ////A ENLEVER
+    ///grilleRevellee = grille;
 }
 
 function quelestlenombredebombeAutourCase(x,y){
@@ -119,14 +125,97 @@ function quelestlenombredebombeAutourCase(x,y){
     }
 }
 
+function afficherGrille(){
+    $('div#grille').text("");
+    for (var i = 0; i < nbCasey; i++){
+            for (var x = 0; x < nbCasex; x++){
+                $('div#grille').append(grilleRevellee[i][x]);
+            }
+            $('div#grille').append("</br>"); 
+    }
+}
+
+function playcase(coordX, coordY){
+    jouerLaCaseRecursif(coordX, coordY);
+    afficherGrille();
+}
+
+function jouerLaCaseRecursif(coordX, coordY){
+
+    if (grilleRevellee[coordY][coordX].src == pathArray+listEtat[0]){
+        console.log("verif case "+ coordX + " , " + coordY);
+
+        // playcase(coordX, coordY) : on tombe sur une case vide (sans numéro ni bombe)
+
+        if (grille[coordY][coordX].src == pathArray+listEtat[0]){
+            if (coordX+1<=nbCasex-1){
+                jouerLaCaseRecursif(Number(coordX)+1, Number(coordY));
+                if (0<=coordY-1){
+                    jouerLaCaseRecursif(Number(coordX)+1, Number(coordY)-1);
+                }
+                if (coordY+1<=nbCasey-1){
+                    jouerLaCaseRecursif(Number(coordX)+1, Number(coordY)+1);
+                }
+            }
+            if (coordY+1<=nbCasey-1){
+                jouerLaCaseRecursif(Number(coordX), Number(coordY)+1);
+
+            }
+            
+            if (0<=coordX-1){
+                jouerLaCaseRecursif(Number(coordX)-1, Number(coordY));
+                if (0<=coordY-1){
+                    jouerLaCaseRecursif(Number(coordX)-1, Number(coordY)-1);
+                }
+                if (coordY+1<=nbCasey-1){
+                    jouerLaCaseRecursif(Number(coordX)-1, Number(coordY)+1);
+                }
+            }
+            if (0<=coordY-1){
+                jouerLaCaseRecursif(Number(coordX), Number(coordY)-1);
+            }
+            grilleRevellee[coordY][coordX].src = pathArray+listEtat[0];
+
+        }
+        // playcase(coordX, coordY) : on tombe sur une case avec un chiffre
+        if (listeNumeros.includes(grille[coordY][coordX].src)){
+            grilleRevellee[coordY][coordX].src = grille[coordY][coordX];
+        }
+        // playcase(coordX, coordY) : on tombe sur une case avec une bombe = fin de jeu
+        if (grille[coordY][coordX].src ==  pathArray+listEtat[10]){
+            finDuJeu(false);
+        }
+    }
+}
+
+
+function finDuJeu(valeurBoolFin){
+    //gagné
+    if (valeurBoolFin){
+
+    } 
+    //perdu
+    else {
+        for (var i = 0; i < nbCasey; i++) {
+        	for (var x = 0; x < nbCasex; x++) {
+                if (grille[i][x].src ==  pathArray+listEtat[10]){
+                    grilleRevellee[i][x].src = pathArray+listEtat[10];
+                }
+            }
+        }
+    }
+    afficherGrille();
+}
+
 
 function newStart(){
     $('div#grille').text("");
-    createcase( nbCasex, nbCasey);
+    createcase(nbCasex, nbCasey);
     ajoutBombe();
     renseigneLeNbrBombe();
     afficherGrille();
-    $('img').on('click', function() {playcase(this.dataset.x, this.dataset.y);});
+    $('img').on('click', function() {
+        playcase(this.dataset.xr, this.dataset.yr);});
 }
 
 $(document).ready(function() {
