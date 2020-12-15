@@ -1,6 +1,6 @@
 var grille;
 var grilleRevellee;
-var caseVerifieeRecursivite;
+//var caseVerifieeRecursivite;
 
 var nbCasex = 9;
 var nbCasey = 9;
@@ -15,9 +15,7 @@ var listEtat = ["images/empty.png", "images/1.png", "images/2.png", "images/3.pn
 
 var pathArray = "file://" + window.location.pathname.slice(0, -10);
 
-var listeNumeros = [pathArray+listEtat[1], pathArray+listEtat[2], pathArray+listEtat[3], pathArray+listEtat[4], pathArray+listEtat[5], pathArray+listEtat[6], pathArray+listEtat[7], pathArray+listEtat[8]];
-
-
+//var listeNumeros = [listEtat[1], listEtat[2], listEtat[3], listEtat[4], listEtat[5], listEtat[6], listEtat[7], listEtat[8]];
 
 function createcase(nbCasex, nbCasey) {
     grilleRevellee =[];
@@ -25,24 +23,19 @@ function createcase(nbCasex, nbCasey) {
     for (var i = 0; i < nbCasey; i++) {
         grille[i]=[];
         for (var x = 0; x < nbCasex; x++) {
-            var imgFont= document.createElement('img');
-            imgFont.dataset.src = listEtat[9];
-            imgFont.dataset.x = x;
-            imgFont.dataset.y = i;
-            grille[i][x]= imgFont;
+            grille[i][x]= listEtat[9];
         }
     }
     for (var i = 0; i < nbCasey; i++) {
         grilleRevellee[i]=[];
         for (var x = 0; x < nbCasex; x++) {
-            var imgFont2= document.createElement('img');
-            imgFont2.dataset.src = listEtat[9];
-            imgFont2.dataset.xr = x;
-            imgFont2.dataset.yr = i;
-            grilleRevellee[i][x]= imgFont2;
+            var imgFont= document.createElement('img');
+            imgFont.dataset.src = listEtat[9];
+            imgFont.dataset.xr = x;
+            imgFont.dataset.yr = i;
+            grilleRevellee[i][x]= imgFont;
         }
     }
-    //grilleRevellee = grille;
 
 
 }
@@ -55,70 +48,68 @@ function ajoutBombe() {
     {
         var x = getRandomInt(nbCasex);
         var y = getRandomInt(nbCasey);
-        grille[y][x].src = listEtat[10];
+        grille[y][x]= listEtat[10];
     }
 }
 function renseigneLeNbrBombe(){
     for (var i = 0; i < nbCasex; i++){
         for (var a = 0; a < nbCasey; a++) {
 
-            if (grille[i][a].src != pathArray+listEtat[10]){
+            if (grille[i][a] != listEtat[10]){
                 quelestlenombredebombeAutourCase(a,i);
-                grille[i][a].src = listEtat[nbBombeAlentour];
+                grille[i][a] = listEtat[nbBombeAlentour];
             }
         }
     }
-    ////A ENLEVER
-    ///grilleRevellee = grille;
 }
 
 function quelestlenombredebombeAutourCase(x,y){
     bombeExist = 0;
     nbBombeAlentour = 0;
     if (x != 0 && y != 0){
-        if (grille[y-1][x-1].src == pathArray+listEtat[10]){
+        if (grille[y-1][x-1] == listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
         }
     }
     if (x != 0){
-        if (grille[y][x-1].src == pathArray+listEtat[10]){
+        if (grille[y][x-1] == listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
         }
     }
     if (y != nbCasey - 1 && x != 0){
-        if (grille[y+1][x-1].src == pathArray+listEtat[10]){
+        if (grille[y+1][x-1] == listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
         }
     }
     if (y != nbCasey - 1){
-        if (grille[y+1][x].src == pathArray+listEtat[10]){
+        if (grille[y+1][x] == listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
         }
     }
     if (x != nbCasex - 1 && y != nbCasey - 1){
-        if (grille[y+1][x+1].src == pathArray+listEtat[10]){
+        if (grille[y+1][x+1] == listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
         }
     }
     if (x != nbCasex - 1){
-        if (grille[y][x+1].src == pathArray+listEtat[10]){
+        if (grille[y][x+1] == listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
         }
     }
     if (y != 0 && x != nbCasex - 1){
-        if (grille[y-1][x+1].src == pathArray+listEtat[10]){
+        if (grille[y-1][x+1] == listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
         }
     }
     if (y != 0){
-        if (grille[y-1][x].src == pathArray+listEtat[10]){
+        if (grille[y-1][x] == listEtat[10]){
             nbBombeAlentour = nbBombeAlentour + 1;
             bombeExist = 1;
         }
@@ -141,13 +132,12 @@ function playcase(coordX, coordY){
 }
 
 function jouerLaCaseRecursif(coordX, coordY){
-
-    if (grilleRevellee[coordY][coordX].src == pathArray+listEtat[0]){
+    //si la case n'est pas jouée
+    if (grilleRevellee[coordY][coordX].src == pathArray+listEtat[9]){
         console.log("verif case "+ coordX + " , " + coordY);
 
-        // playcase(coordX, coordY) : on tombe sur une case vide (sans numéro ni bombe)
-
-        if (grille[coordY][coordX].src == pathArray+listEtat[0]){
+        // si on tombe sur une case vide (sans numéro ni bombe)
+        if (grille[coordY][coordX] == listEtat[0]){
             if (coordX+1<=nbCasex-1){
                 jouerLaCaseRecursif(Number(coordX)+1, Number(coordY));
                 if (0<=coordY-1){
@@ -177,12 +167,12 @@ function jouerLaCaseRecursif(coordX, coordY){
             grilleRevellee[coordY][coordX].src = pathArray+listEtat[0];
 
         }
-        // playcase(coordX, coordY) : on tombe sur une case avec un chiffre
-        if (listeNumeros.includes(grille[coordY][coordX].src)){
-            grilleRevellee[coordY][coordX].src = grille[coordY][coordX];
+        // si on tombe sur une case avec un chiffre
+        if (listEtat.includes(grille[coordY][coordX])){
+            grilleRevellee[coordY][coordX].src = pathArray + grille[coordY][coordX];
         }
-        // playcase(coordX, coordY) : on tombe sur une case avec une bombe = fin de jeu
-        if (grille[coordY][coordX].src ==  pathArray+listEtat[10]){
+        // si on tombe sur une case avec une bombe = fin de jeu
+        if (grille[coordY][coordX] == listEtat[10]){
             finDuJeu(false);
         }
     }
@@ -214,6 +204,7 @@ function newStart(){
     ajoutBombe();
     renseigneLeNbrBombe();
     afficherGrille();
+
     $('img').on('click', function() {
         playcase(this.dataset.xr, this.dataset.yr);});
 }
